@@ -11,7 +11,7 @@ AQuadSimulatorPawn::AQuadSimulatorPawn(const FObjectInitializer& ObjectInitializ
 	{
 		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> PlaneMesh;
 		FConstructorStatics()
-			: PlaneMesh(TEXT("/Game/Meshes/UFO.UFO"))
+			: PlaneMesh(TEXT("/Game/Meshes/Quad/QuadModel"))
 		{
 		}
 	};
