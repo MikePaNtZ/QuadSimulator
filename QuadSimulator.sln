@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QuadSimulator", "Intermediate\ProjectFiles\QuadSimulator.vcxproj", "{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		DebugGame Editor|Windows = DebugGame Editor|Windows
+		DebugGame|Windows = DebugGame|Windows
+		Development Editor|Windows = Development Editor|Windows
+		Development|Windows = Development|Windows
+		Shipping|Windows = Shipping|Windows
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.DebugGame Editor|Windows.ActiveCfg = DebugGame_Editor|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.DebugGame Editor|Windows.Build.0 = DebugGame_Editor|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.DebugGame|Windows.ActiveCfg = DebugGame_Game|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.DebugGame|Windows.Build.0 = DebugGame_Game|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.Development Editor|Windows.ActiveCfg = Development_Editor|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.Development Editor|Windows.Build.0 = Development_Editor|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.Development|Windows.ActiveCfg = Development_Game|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.Development|Windows.Build.0 = Development_Game|x64
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.Shipping|Windows.ActiveCfg = Shipping_Game|Win32
+		{706DA0A7-EFAA-4021-8B8D-7DD173289CAC}.Shipping|Windows.Build.0 = Shipping_Game|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
