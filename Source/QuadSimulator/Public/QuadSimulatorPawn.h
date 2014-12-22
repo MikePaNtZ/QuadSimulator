@@ -114,6 +114,18 @@ private:
 	/** Throttle input */
 	float Throttle;
 
+	/** Quadcopter drag coefficient in the x direction of motion. */
+	float DragCoefficientX;
+
+	/** Quadcopter drag coefficient in the y direction of motion. */
+	float DragCoefficientY;
+
+	/** Quadcopter drag coefficient in the x direction of motion. */
+	float DragCoefficientZ;
+
+	/** Quadcopter drag coefficient matrix. */
+	FMatrix DragCoefficientMatrix;
+
 	/** Quad copter position in the inertial (world) frame */
 	FVector Position_IF;
 
@@ -152,6 +164,9 @@ private:
 
 	/** Linear acceleration in the inertial (world) frame */
 	FVector LinearAccel_IF;
+
+	/** Drag acceleration in the inertial (world) frame */
+	FVector DragAccel_IF;
 
 	/** Quad copter roll (radians) */
 	float Roll;

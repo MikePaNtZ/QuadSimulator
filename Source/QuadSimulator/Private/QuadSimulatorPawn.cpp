@@ -71,7 +71,10 @@ void AQuadSimulatorPawn::initializeQuadParameters()
 	Mass = 0.2f;
 	Thrust = 0.f;
 	ThrustCoefficient = 9.8f;
-	AngularPosition0_IF.Set(FMath::DegreesToRadians(0.f), FMath::DegreesToRadians(0.f), FMath::DegreesToRadians(-45.f));
+	DragCoefficientX = 0.1f; DragCoefficientY = 0.1f; DragCoefficientZ = 0.1f;
+	//DragCoefficientX = 0.f; DragCoefficientY = 0.f; DragCoefficientZ = 0.f;
+	DragCoefficientMatrix.M[0][0] = DragCoefficientX; DragCoefficientMatrix.M[1][1] = DragCoefficientY; DragCoefficientMatrix.M[2][2] = DragCoefficientZ;
+	AngularPosition0_IF.Set(FMath::DegreesToRadians(-15.f), FMath::DegreesToRadians(0.f), FMath::DegreesToRadians(0.f));
 	LinearAccel_IF.Set(0.f, 0.f, 0.f);
 	LinearVel0_IF.Set(0.f, 0.f, 0.f);
 	// Location is in centimeters?
@@ -90,10 +93,17 @@ void AQuadSimulatorPawn::UpdateDynamics()
 {
 	Roll = AngularPosition_IF.X; Pitch = AngularPosition_IF.Y; Yaw = AngularPosition_IF.Z;
 
-//	FVector ThrustAccel_IF = calculateThrustAccel(Thrust);
+	// Calculate the thrust from throtlle input.
 	Thrust = ThrustCoefficient*Throttle;
 	FVector ThrustAccel_IF = calculateThrustAccel(Thrust);
-	LinearAccel_IF = GravAccel_IF + ThrustAccel_IF;
+
+	// Calculate drag force acceleration. Should move this to a function, and also have a re-usable convert 
+	// from 4 vector to 3 vector by ignoring the W component.
+	FVector4 DragAccel_IF_Vector4 = DragCoefficientMatrix.TransformVector(LinearVel_IF);
+	DragAccel_IF.X = DragAccel_IF_Vector4.X; DragAccel_IF.Y = DragAccel_IF_Vector4.Y; DragAccel_IF.Z = DragAccel_IF_Vector4.Z;
+
+	// Calculate the linear accleration from gravitational accel, thrust accel, and drag accel.
+	LinearAccel_IF = GravAccel_IF + ThrustAccel_IF - (1/Mass)*DragAccel_IF;
 	UE_LOG(LogTemp, Warning, TEXT("Quad Accel X: %f"), LinearAccel_IF.X);
 	UE_LOG(LogTemp, Warning, TEXT("Quad Accel Y: %f"), LinearAccel_IF.Y);
 	UE_LOG(LogTemp, Warning, TEXT("Quad Accel Z: %f"), LinearAccel_IF.Z);
