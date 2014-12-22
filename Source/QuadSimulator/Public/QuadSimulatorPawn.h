@@ -62,6 +62,9 @@ private:
 	/** Calculates the inertial frame acceleration due to the quad copter's thrust. */
 	FVector calculateThrustAccel(float thrust);
 
+	/** Converts rotations in math frame to rotations in sim frame. */
+	FRotator convertToSimRotation(FRotator rotatorMathFrame);
+
 	/** How quickly forward speed changes */
 	UPROPERTY(Category=Plane, EditAnywhere)
 	float Acceleration;
@@ -116,6 +119,12 @@ private:
 
 	/** Quad copter initial position in the inertial (world) frame */
 	FVector Position0_IF;
+
+	/** Angular position in the inertial (world) frame */
+	FVector AngularPosition_IF;
+
+	/** Initial angular position in the inertial (world) frame */
+	FVector AngularPosition0_IF;
 
 	/** Angular velocity in the inertial (world) frame */
 	FVector AngularVel_IF;

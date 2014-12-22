@@ -71,6 +71,7 @@ void AQuadSimulatorPawn::initializeQuadParameters()
 	Mass = 0.2f;
 	Thrust = 0.f;
 	ThrustCoefficient = 9.8f;
+	AngularPosition0_IF.Set(FMath::DegreesToRadians(0.f), FMath::DegreesToRadians(0.f), FMath::DegreesToRadians(-45.f));
 	LinearAccel_IF.Set(0.f, 0.f, 0.f);
 	LinearVel0_IF.Set(0.f, 0.f, 0.f);
 	// Location is in centimeters?
@@ -80,17 +81,18 @@ void AQuadSimulatorPawn::initializeQuadParameters()
 void AQuadSimulatorPawn::applyInitialConditions()
 {
 	Throttle = 0.f;
+	AngularPosition_IF = AngularPosition0_IF;
 	LinearVel_IF = LinearVel0_IF;
 	Position_IF = Position0_IF;
 }
 
 void AQuadSimulatorPawn::UpdateDynamics()
 {
+	Roll = AngularPosition_IF.X; Pitch = AngularPosition_IF.Y; Yaw = AngularPosition_IF.Z;
+
 //	FVector ThrustAccel_IF = calculateThrustAccel(Thrust);
-	UE_LOG(LogTemp, Warning, TEXT("Throttle : %f"), Throttle);
 	Thrust = ThrustCoefficient*Throttle;
 	FVector ThrustAccel_IF = calculateThrustAccel(Thrust);
-	UE_LOG(LogTemp, Warning, TEXT("Thrust Accel Z: %f"), ThrustAccel_IF.Z);
 	LinearAccel_IF = GravAccel_IF + ThrustAccel_IF;
 	UE_LOG(LogTemp, Warning, TEXT("Quad Accel X: %f"), LinearAccel_IF.X);
 	UE_LOG(LogTemp, Warning, TEXT("Quad Accel Y: %f"), LinearAccel_IF.Y);
@@ -107,6 +109,12 @@ void AQuadSimulatorPawn::UpdateDynamics()
 	}
 
 	SetActorLocation(Position_IF*100.f);
+
+	FRotator QuadRotation(FMath::RadiansToDegrees(Pitch), FMath::RadiansToDegrees(Yaw), FMath::RadiansToDegrees(Roll));
+	UE_LOG(LogTemp, Warning, TEXT("Pitch Math Frame :  %f"), QuadRotation.Pitch);
+	UE_LOG(LogTemp, Warning, TEXT("Quad Pitch Sim Frame :  %f"), convertToSimRotation(QuadRotation).Pitch);
+//	AddActorWorldRotation(convertToSimRotation(QuadRotation));
+	SetActorRotation(convertToSimRotation(QuadRotation));
 }
 
 FVector AQuadSimulatorPawn::calculateThrustAccel(float thrust)
@@ -117,6 +125,15 @@ FVector AQuadSimulatorPawn::calculateThrustAccel(float thrust)
 	thrustVectorInIF.Y = FMath::Sin(Yaw)*FMath::Sin(Pitch)*FMath::Cos(Roll) - FMath::Cos(Yaw)*FMath::Sin(Roll);
 	thrustVectorInIF.Z = FMath::Cos(Pitch)*FMath::Cos(Roll);
 	return specificThrust*thrustVectorInIF;
+}
+
+FRotator AQuadSimulatorPawn::convertToSimRotation(FRotator rotatorMathFrame)
+{
+	FRotator rotatorSimFrame;
+	rotatorSimFrame.Roll = -1.0f*rotatorMathFrame.Roll;
+	rotatorSimFrame.Pitch = -1.0f*rotatorMathFrame.Pitch;
+	rotatorSimFrame.Yaw = -1.0f*rotatorMathFrame.Yaw;
+	return rotatorSimFrame;
 }
 
 void AQuadSimulatorPawn::Tick(float DeltaSeconds)
